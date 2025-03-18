@@ -1,0 +1,137 @@
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+    padding-top: 60px;
+}
+
+.offcanvas {
+    width: 250px;
+}
+
+.offcanvas-header {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn {
+    color:  black;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #212529;
+    color: white;
+    padding: 1rem 1.5rem;
+}
+
+.btn-primary {
+    background-color: white;
+    border-color: #212529;
+}
+
+.btn-primary:hover {
+    background-color: #000;
+    border-color: #000;
+}
+
+.btn-secondary {
+    background-color: #fff;
+    border-color: #212529;
+    color: #212529;
+}
+
+.btn-secondary:hover {
+    background-color: #212529;
+    border-color: #212529;
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    color: #212529;
+    border-color: #212529;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #212529;
+    border-color: #212529;
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.table {
+    border-color: #dee2e6;
+}
+
+.table-dark {
+    background-color: #212529;
+}
+
+.btn-info {
+    background-color: #212529;
+    border-color: #212529;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+}
+
+.btn-danger {
+    background-color: white;
+    border-color: #212529;
+    color: #212529;
+}
+
+.btn-danger:hover {
+    background-color: #212529;
+    border-color: #212529;
+}
+
+.form-control:focus {
+    border-color: #212529;
+    box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.25);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.pagination .page-link {
+    color: #212529;
+    border-color: #212529;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #212529;
+    border-color: #212529;
+    color: white;
+}
+
+.pagination .page-link:hover {
+    background-color: #212529;
+    border-color: #212529;
+    color: white;
+}
+
+/* Form styles */
+.form-label {
+    font-weight: 500;
+    color: #212529;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875em;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
