@@ -9,13 +9,20 @@ if (!$conn) {
 
 $username = $password = "";
 $username_err = $password_err = "";
+$login_identifier = ""; // Can be either username or email
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Validate username
+    // Validate login identifier (username or email)
     if (empty(trim($_POST['username']))) {
-        $username_err = "Please enter your username.";
+        $username_err = "Please enter your username or email.";
     } else {
-        $username = trim($_POST['username']);
+        $login_identifier = trim($_POST['username']);
+        // Check if input is an email
+        if (filter_var($login_identifier, FILTER_VALIDATE_EMAIL)) {
+            $sql = "SELECT id, username, password FROM users WHERE email = ?";
+        } else {
+            $sql = "SELECT id, username, password FROM users WHERE username = ?";
+        }
     }
 
     // Validate password
@@ -27,10 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check input errors before processing
     if (empty($username_err) && empty($password_err)) {
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
         if ($stmt = mysqli_prepare($conn, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            $param_username = $username;
+            mysqli_stmt_bind_param($stmt, "s", $login_identifier);
 
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
@@ -238,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php endif; ?>
                     <form method="POST" action="" id="loginForm" novalidate>
                         <div class="mb-4">
-                            <label for="username" class="form-label">Username</label>
+                            <label for="username" class="form-label">Username or Email</label>
                             <input type="text" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" 
                                    id="username" name="username" required 
                                    value="<?php echo htmlspecialchars($username); ?>"
@@ -260,6 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </form>
                     <div class="register-link">
                         <p class="mb-0">Don't have an account? <a href="register.php">Register here</a></p>
+                        <p class="mb-0 mt-2"><a href="forgot_password.php">Forgot Password?</a></p>
                     </div>
                 </div>
             </div>

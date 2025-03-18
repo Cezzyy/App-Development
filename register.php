@@ -6,8 +6,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
+$username = $password = $confirm_password = $email = "";
+$username_err = $password_err = $confirm_password_err = $email_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate username
@@ -59,12 +59,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
+    // Validate email
+    if (empty(trim($_POST["email"]))) {
+        $email_err = "Please enter an email.";
+    } elseif (!filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL)) {
+        $email_err = "Please enter a valid email address.";
+    } else {
+        $sql = "SELECT id FROM users WHERE email = ?";
+        if ($stmt = mysqli_prepare($conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
+            $param_email = trim($_POST["email"]);
+            
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    $email_err = "This email is already taken.";
+                } else {
+                    $email = trim($_POST["email"]);
+                }
+            } else {
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+            mysqli_stmt_close($stmt);
+        }
+    }
+
     // Check input errors before inserting in database
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err)) {
-        $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($email_err)) {
+        $sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
         
         if ($stmt = mysqli_prepare($conn, $sql)) {
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
+            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_email);
             
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
@@ -282,10 +308,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php echo $username_err; ?>
                             </div>
                             <small class="form-text text-muted">Username must be at least 3 characters long and can only contain letters, numbers, and underscores.</small>
+                        </div>
+                        <div class="form-group">
+                                   class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" 
+                                   value="<?php echo htmlspecialchars($email); ?>"
+                                   required>
+                            <div class="invalid-feedback">
+                                <?php echo $email_err; ?>
+                            </div>
+                            <small class="form-text text-muted">Please enter a valid email address. This will be used for password recovery.</small>
                         </div>    
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" name="password" 
                                    class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" 
                                    required minlength="6">
                             <div class="invalid-feedback">
@@ -337,6 +371,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             form.username.classList.remove('is-invalid');
             form.username.classList.add('is-valid');
+        }
+
+        // Email validation
+        let email = form.email.value.trim();
+        if (email === '') {
+            form.email.classList.add('is-invalid');
+            form.email.nextElementSibling.textContent = 'Please enter an email address';
+            isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            form.email.classList.add('is-invalid');
+            form.email.nextElementSibling.textContent = 'Please enter a valid email address';
+            isValid = false;
+        } else {
+            form.email.classList.remove('is-invalid');
+            form.email.classList.add('is-valid');
         }
 
         // Password validation
