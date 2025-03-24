@@ -310,6 +310,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <small class="form-text text-muted">Username must be at least 3 characters long and can only contain letters, numbers, and underscores.</small>
                         </div>
                         <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" 
                                    class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" 
                                    value="<?php echo htmlspecialchars($email); ?>"
                                    required>
@@ -320,6 +322,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>    
                         <div class="form-group">
                             <label>Password</label>
+                            <input type="password" name="password" 
                                    class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" 
                                    required minlength="6">
                             <div class="invalid-feedback">

@@ -148,13 +148,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s;
+            transition: all 0.2s ease-in-out;
             margin-top: 1rem;
         }
         .btn-dark:hover {
-            background-color: #ffffff;
-            color: #000000;
+            background-color: #333333;
+            color: #ffffff;
+            border-color: #333333;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
     </style>
 </head>
